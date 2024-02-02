@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <!-- BEGIN TEMPLATE HEAD -->
+    <!-- Metadata -->
+    <title>Wintering Map</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- External -->
+    <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet' type='text/css'>
+
+    <style>
+        /* Styled to match Grove  */
+
+        body {
+            font-family: "Poppins", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+            letter-spacing: 0.08px;
+            word-spacing: 0.4px;
+            line-height: 1.5;
+        }
+    </style>
+
+    <!-- END TEMPLATE HEAD -->
+
+    <!-- BEGIN CUSTOM HEAD -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"
+        integrity="sha512-M7nHCiNUOwFt6Us3r8alutZLm9qMt4s9951uo8jqO4UwJ1hziseL6O3ndFyigx6+LREfZqnhHxYjKRJ8ZQ69DQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+        integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+    <style>
+
+      
+
+        
+
+
+        #leaflet {
+            margin: auto;
+            font-family: Poppins;
+            z-index: 0;
+        }
+
+       
+        h2, h3, h4 {
+                margin: 0;
+            }
+
+
+
+        .leaflet-control-attribution {
+            width: 50%
+        }
+
+      
+    </style>
+
+    <!-- END CUSTOM HEAD -->
+
+</head>
+
+<body>
+    <!-- BEGIN CUSTOM BODY -->
+
+    <script>
+
+        async function createMap() {
+
+
+            const worcester_range = await d3.json("worcester_range.json")
+            const data = worcester_range.features
+
+            console.log(data)
+            
+            const color = d3.scaleOrdinal(data.map(d => d.properties.NAME), d3.schemeCategory10)
+
+            console.log(color.domain())
+            
+
+        
+
+
+
+            const map = L.map("leaflet", {
+                maxBounds: [[44.67451255330359, -72.15133666992189], [[44.18417357325395, -73.08380126953126]]],
+                minZoom: 8,
+                maxBoundsViscosity: 1
+            }).setView(
+                [44.42987934519187, -72.61793817578537],
+                10
+            );
+
+            console.log(map.getBounds())
+
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: `Data Source: <a href="https://geodata.vermont.gov/datasets/vt-protected-lands-database">VT Center for Geographic Information</a> | Tiles &copy; Esri | <i>Corey Dockser / Vermont Public </i>`,
+            }).addTo(map);
+            
+           
+
+           
+            var range_group = L.featureGroup().addTo(map)
+
+
+            function popups(feature, layer) {
+                layer.bindPopup(`${feature.properties.NAME}`)
+            }
+            var range_layer = L.geoJSON(data, {
+                onEachFeature: popups,
+                style: function (geoJsonFeature) {
+                    return {
+                        fillColor: color(geoJsonFeature.properties.NAME),
+                        fillOpacity: 1,
+                        stroke: false
+                    }
+                }
+            }).addTo(range_group)
+
+            console.log(range_group.getBounds())
+
+            
+
+
+
+        }
+        createMap()
+    </script>
+    
+    <div><h2>Worcester Range</h2>
+    <div id="leaflet" style="min-height: 500px; max-height: 800px; width: 100%"></div>
+    <div style="font-size: 14px; color:rgb(118, 118, 118)">
+        The Worcester Range consists of five properties comprising 18,722 acres.</div>
+
+
+
+
+
+
+
+    <script>
+        window.onload = function () {
+            pymChild = new pym.Child({});
+            pym.Child({ polling: 500 });
+        };
+    </script>
+
+
+</body>
+
+</html>
