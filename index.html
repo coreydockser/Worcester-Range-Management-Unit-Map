@@ -84,9 +84,9 @@
 
             console.log(data)
             
-            const color = d3.scaleOrdinal(data.map(d => d.properties.NAME), d3.schemeCategory10)
+            const color = d3.scaleOrdinal(data.map(d => d.properties.NAME), ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00'])
 
-            console.log(color.domain())
+          
             
 
         
@@ -104,8 +104,8 @@
 
             console.log(map.getBounds())
 
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: `Data Source: <a href="https://geodata.vermont.gov/datasets/vt-protected-lands-database">VT Center for Geographic Information</a> | Tiles &copy; Esri | <i>Corey Dockser / Vermont Public </i>`,
+            L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+                attribution: `Data Source: <a href="https://geodata.vermont.gov/datasets/vt-protected-lands-database">VT Center for Geographic Information</a> | &copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> | <i>Corey Dockser / Vermont Public </i>`,
             }).addTo(map);
             
            
